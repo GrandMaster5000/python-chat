@@ -1,9 +1,11 @@
 import socket
 import time
+import signal
+
 
 host = socket.gethostbyname(socket.gethostname())
 port = 9090
-
+print(host)
 clients = []
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -12,6 +14,14 @@ s.bind((host, port))
 quit = False
 print("[ Server Started]")
 
+
+def signal_handler(signal, frame):
+    global quit
+    print("exiting")
+    quit = True
+
+
+signal.signal(signal.SIGINT, signal_handler)
 while not quit:
     try:
         data, addr = s.recvfrom(1024)
